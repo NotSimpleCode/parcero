@@ -11,7 +11,7 @@ Con Par-0 puedes recibir consejos personalizados, automatizar procesos y mantene
 
 - [**n8n**](https://n8n.io/) → Automatización de procesos y workflows.  
 - [**Vercel**](https://vercel.com/) → Hosting de la landing page.  
-- [**Supabase**](https://supabase.com/) → Base de datos en la nube.  
+- [**Supabase**](https://supabase.com/) → Base de datos en la nube. Acá puedes ver el diagrama(https://drive.google.com/file/d/1lBzqe6ge7W6ENyg-dEbzRJFlBANUzEnn/view?usp=sharing)
 - [**WhatsApp Business API**](https://developers.facebook.com/docs/whatsapp) → Envío de mensajes y comunicación con usuarios.  
 - [**Perplexity**](https://www.perplexity.ai/) → Soporte de consultas web con IA.  
 - [**OpenAI**](https://openai.com/) → Modelo de lenguaje para generar respuestas inteligentes y adaptadas al contexto.  
@@ -20,10 +20,10 @@ Con Par-0 puedes recibir consejos personalizados, automatizar procesos y mantene
 
 ## 👩‍💻 Creadores – Equipo ImagineApps
 
-- Natalia Castro  
-- Paola Olarte  
-- Diego Rubiano  
-- Luis Arrieta  
+- **Natalia Castro:** líder y diseñadora obsesionada por contar historias y crear experiencias de alto impacto.
+- **Paola Olarte:** la tesa del software, arquitectura y soluciones integrales.
+- **Diego Rubiano:** el master de bases de datos, diagramas y backend.
+- **Luis Arrieta:** el crack de las automatizaciones e inteligencia artificial.
 
 ---
 
@@ -47,7 +47,7 @@ Con Par-0 puedes recibir consejos personalizados, automatizar procesos y mantene
 
 ## 🌐 Demo
 
-👉 [Probar la versión en vivo](https://v0-par-0.vercel.app/)  
+👉 [Probar la versión en vivo](https://parcero.vercel.app/)  
 
 ---
 
