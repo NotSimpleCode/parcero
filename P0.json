@@ -1,0 +1,773 @@
+{
+  "name": "P0",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3248,
+        80
+      ],
+      "id": "cff458f0-65b5-4b3d-b421-c852d3371d8e",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "772fMk1fdS3PfVpk",
+          "name": "OpenAi account Imagine"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WH').item.json.sender }}",
+        "contextWindowLength": 12
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        2320,
+        752
+      ],
+      "id": "bdb01d5c-b235-47f9-be8e-d190bdc3805c",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "YQzRz6REQ3youBfe",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Esta herramienta te permite consultar varios registros de la tabla de gastos del usuario usando como parámetro obligatorio el ID del usuario para poder filtrar los registros. También puedes realizar filtros en tanto a las columnas de la tabla:\npublic.EXPENSES (\n  id_expense uuid NOT NULL DEFAULT gen_random_uuid(),\n  amount_expense numeric NOT NULL,\n  date_expense date NOT NULL DEFAULT now(),\n  name_expense character varying DEFAULT ''::character varying,\n  id_user bigint,\n  id_category bigint DEFAULT '1'::bigint,\n  id_payment_method bigint DEFAULT '4'::bigint,\n  status_expense character varying DEFAULT 'P'::character varying,\n  CONSTRAINT EXPENSES_pkey PRIMARY KEY (id_expense),\n  CONSTRAINT EXPENSES_id_payment_method_fkey FOREIGN KEY (id_payment_method) REFERENCES public.PAYMENT_METHODS(id_payment),\n  CONSTRAINT EXPENSES_id_user_fkey FOREIGN KEY (id_user) REFERENCES public.USERS(id_user),\n  CONSTRAINT EXPENSES_id_category_fkey FOREIGN KEY (id_category) REFERENCES public.CATEGORY(id_category)\n);",
+        "operation": "getAll",
+        "tableId": "expenses",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "filterType": "string",
+        "filterString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filters__String_', `PostgREST Filters — n8n getMany (conciso)\n\nREGLA OBLIGATORIA\n- Siempre incluye: id_user=eq.{USER_ID}\n- Si no tienes {USER_ID}, NO consultes (primero resuélvelo por teléfono → user_id).\n\nSintaxis base\n<col>=<op>.<valor>\n\nOperadores útiles\neq, neq, gt, gte, lt, lte, like, ilike, in, is, fts, wfts, cs(@>), cd(<@), ov(&&), not, and, or\nTip: usa * como comodín en like/ilike (equivale a %). Para IN: in.(v1,v2,...) y si hay comas en el valor, usa comillas.\n\nCombinación de filtros\n- AND implícito por “&”:\n  id_user=eq.{UID}&amount_expense=gt.100000\n- AND agrupado:\n  and=(id_user.eq.{UID},amount_expense.gt.100000)\n- OR:\n  or=(status_income.eq.P,status_income.eq.A)\n- NOT:\n  not.status_expense.eq.C\n\nEjemplos (sustituye {UID})\n\n# Expenses (gastos) últimos 30 días, monto > 100k y texto:\nid_user=eq.{UID}&date_expense=gte.2025-07-24&amount_expense=gt.100000&name_expense=ilike.*uber*\n\n# Incomes (ingresos) por estado y rango de fechas:\nid_user=eq.{UID}&status_income=eq.P&date_income=gte.2025-08-01&date_income=lt.2025-09-01\n\n# IN en categorías:\nid_user=eq.{UID}&id_category=in.(1,2,3)\n\n# Nulos / no nulos:\nid_user=eq.{UID}&name_expense=is.not_null\nid_user=eq.{UID}&status_income=is.null\n\n# Full-text (websearch):\nid_user=eq.{UID}&name_income=wfts.cuenta+de+ahorros\n`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        192
+      ],
+      "id": "bcb0889a-8d67-4c66-90b3-8617f9f7bf9f",
+      "name": "Get many rows table Expenses",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "incomes",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "filterType": "string",
+        "filterString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filters__String_', `PostgREST Filters — INCOMES (getMany)\n\nREGLA OBLIGATORIA\n- Siempre incluye: id_user=eq.{USER_ID}\n- Si no tienes {USER_ID}, NO consultes (primero resuélvelo por teléfono → user_id).\n\nSintaxis base\n<col>=<op>.<valor>\n\nOperadores útiles\neq, neq, gt, gte, lt, lte, like, ilike, in, is, wfts, not, and, or\nTip: en like/ilike usa * como comodín (equivale a %). Para IN: in.(v1,v2,...). Para valores con coma, usa comillas.\n\nColumnas (INCOMES)\n- id_income (bigint)\n- date_income (date)\n- amount_income (numeric)\n- name_income (text)\n- status_income (text)\n\nEjemplos (sustituye {UID})\n\n# Últimos 30 días y monto ≥ 100k\nid_user=eq.{UID}&date_income=gte.2025-07-24&amount_income=gte.100000\n\n# Rango de fechas (agosto 2025)\nand=(id_user.eq.{UID},date_income.gte.2025-08-01,date_income.lt.2025-09-01)\n\n# Búsqueda por texto (case-insensitive)\nid_user=eq.{UID}&name_income=ilike.*salario*\n\n# Estados múltiples (OR)\nand=(id_user.eq.{UID},or(status_income.eq.P,status_income.eq.A))\n\n# IN en estados\nid_user=eq.{UID}&status_income=in.(P,A)\n\n# Nulos / no nulos\nid_user=eq.{UID}&name_income=is.null\nid_user=eq.{UID}&name_income=is.not_null\n\n# Full-text (websearch)\nid_user=eq.{UID}&name_income=wfts.ingreso+extra\n`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        3760,
+        176
+      ],
+      "id": "a360be24-716a-491b-9a84-37c0b0111b74",
+      "name": "Get many rows table INCOMES",
+      "notesInFlow": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2640,
+        112
+      ],
+      "id": "b237bdd0-dda0-4d0d-9847-54bbfaeca4d7",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "772fMk1fdS3PfVpk",
+          "name": "OpenAi account Imagine"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $('WH').item.json.sender }}",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        2592,
+        -512
+      ],
+      "id": "b8e9ee70-0493-471e-b166-30b9318e98d0",
+      "name": "Send message",
+      "webhookId": "f12cc35f-01f4-40e1-a8df-fab3d81a87de",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=Propósito\nInsertar registros en public.EXPENSES\n\nEsquema objetivo (completo)\npublic.EXPENSES (\n  id_expense         uuid                NOT NULL DEFAULT gen_random_uuid(),\n  amount_expense     numeric             NOT NULL,\n  date_expense       date                NOT NULL DEFAULT now(),\n  name_expense       varchar             DEFAULT '',\n  id_user            bigint,\n  id_category        bigint              DEFAULT 1,\n  id_payment_method  bigint              DEFAULT 4,\n  status_expense     varchar             DEFAULT 'P',\n  -- FKs:\n  -- id_payment_method → public.PAYMENT_METHODS(id_payment)\n  -- id_user           → public.USERS(id_user)\n  -- id_category       → public.CATEGORY(id_category)\n  -- PK: id_expense\n)\n\nReglas:\n1. Interpretar fechas relativas contra {{ $now.toLocal().format('yyyy-MM-dd HH:mm:ss') }}\n2. No inventar datos faltantes. Si no hay amount_expense válido o no hay id_user, devolver estado \"needs_clarification\".\n3. Sin ID de usuario no se puede continuar.\n4. Inferir categoría y método de pago usando las herramientas.\n",
+        "tableId": "expenses",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "id_user",
+              "fieldValue": "={{ $('User Var').item.json.id_user }}"
+            },
+            {
+              "fieldId": "name_expense",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues1_Field_Value', `Campo: name_expense (TEXT/VARCHAR)\n\n- Texto corto y descriptivo del gasto.\n- Enviar como **string** (con comillas). Trimar espacios; sin HTML.\n- Si no se infiere, usar \"\" (vacío) o pedir confirmación.\n\nEjemplos: \ncorrecto: {\"name_expense\": \"almuerzo\"}\nincorrecto: {\"name_expense\": 123}`, 'string') }}"
+            },
+            {
+              "fieldId": "amount_expense",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues2_Field_Value', `Campo: amount_expense (NUMERIC)  [¡nombre correcto: amount_expense, no \"ammount_expense\"!]\n\n- Obligatorio. Solo número > 0, **sin comillas**.\n- Normalizar separadores: usar punto decimal (e.g., 1200.50).\n\nEjemplos:\ncorrecto: {\"amount_expense\": 15000.5}\nincorrecto: {\"amount_expense\": \"15000.5\"}\n\nNo se registra el valor total si este cuenta con una especificación de gasto dividido.`, 'string') }}"
+            },
+            {
+              "fieldId": "date_expense",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues3_Field_Value', `ejemplo:\n2025-08-13\nformato: yyyy-MM-dd`, 'string') }}"
+            },
+            {
+              "fieldId": "id_category",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues4_Field_Value', `El id_categoría se obtiene consultando la herramienta \"expense_categories_list\" e infiriendo a qué categoría corresponde el name_expense de los métodos traídos por la herramienta, devolviendo así el ID de esa categoría.`, 'string') }}"
+            },
+            {
+              "fieldId": "id_payment_method",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues5_Field_Value', `El id_payment_method se obtiene consultando la herramienta \"payment_methods_list\" e infiriendo a qué método se refiere el usuario de los métodos traídos por la herramienta.`, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        3072,
+        96
+      ],
+      "id": "207892f8-8a7f-48d4-b226-b300ae5fb1e7",
+      "name": "Create an expense",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=Usar solo se va a registrar en base de datos un ingreso de dinero.",
+        "tableId": "incomes",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "id_user",
+              "fieldValue": "={{ $('User Var').item.json.id_user }}"
+            },
+            {
+              "fieldId": "name_income",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues1_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldId": "amount_income",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues2_Field_Value', ``, 'string') }}"
+            },
+            {
+              "fieldId": "date_income",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues3_Field_Value', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        -160
+      ],
+      "id": "92f3734c-d719-4392-a493-30c8bf1664c4",
+      "name": "Create an incomes",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        2592,
+        -144
+      ],
+      "id": "6657eddb-350d-4c5b-b16f-1fdf10860ce9",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=Propósito\nObtener todas las categorías de gastos desde public.CATEGORY. Solo lectura.\n\nEntrada\n— (sin parámetros)\n\nSalida\nArray de objetos:\n[\n  {\n    \"id_category\": <bigint>,\n    \"name_category\": \"<string>\",\n    \"created_at\": \"YYYY-MM-DDTHH:MM:SS.ssssss±HH:MM\"\n  },\n  ...\n]\n\nNotas\n- No inventa datos ni modifica la BD.\n- Orden sugerido: name_category ASC (si el flujo lo requiere).",
+        "operation": "getAll",
+        "tableId": "category",
+        "returnAll": true,
+        "filterType": "none"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        2736,
+        768
+      ],
+      "id": "4eda3b98-247e-42bf-a2af-3d85faccf45b",
+      "name": "expense_categories_list",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Propósito\nObtener todos los métodos de pago desde public.PAYMENT_METHODS. Solo lectura.\n\nEntrada\n— (sin parámetros)\n\nSalida\nArray de objetos:\n[\n  {\n    \"id_payment\": <bigint>,\n    \"name_payment\": \"<string>\",\n    \"created_at\": \"YYYY-MM-DDTHH:MM:SS.ssssss±HH:MM\"\n  },\n  ...\n]\n\nNotas\n- No inventa datos ni modifica la BD.\n- Orden sugerido: name_payment ASC (si el flujo lo requiere).",
+        "operation": "getAll",
+        "tableId": "payment_methods",
+        "returnAll": true,
+        "filterType": "none"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        768
+      ],
+      "id": "33c40b57-0580-426b-952b-71448cfb86d0",
+      "name": "payment_methods_list",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Este agente puede consultar acerca de los gastos y los ingresos de un usuario usando su número de teléfono",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=Rol:\nEres un agente especializado en utilizar herramientas, consultas https y llamadas a supabase, para extraer información de una base de datos.\n\nObligatorio:\n- _phone (string) — SIN este campo NO invoques la RPC. Normaliza al formato almacenado.\n\nReglas:\n1. NO Normalices los números de telénofo, estos solo debe llevarn dígitos y deben ser pasados como texto a las herramientas.\n\n2. Omite el estado de las transacciones, no menciones si estan pendientes o confirmadas.\n\nNotas:\nahora: {{ $now.toLocal().format('yyyy-MM-dd HH:mm:ss') }}\n\nid_user = {{ $('User Var').item.json.id_user }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        3312,
+        -96
+      ],
+      "id": "9e7efe52-1c7a-4e09-82fd-d1a06db3ad68",
+      "name": "DB Query Expenses And Icomes Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "toolDescription": "Este agente puede realizar inserciones en la base de datos del usuario para mantener al día sus gastos",
+        "text": "={{ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('System_Message', ``, 'string') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        2768,
+        -112
+      ],
+      "id": "386a0c8f-f92a-43a6-97ce-a03f34a57732",
+      "name": "DB Creation An Expense Agent",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17c64559-5a85-4cac-b16d-501c8a37cfe6",
+              "name": "id_user",
+              "value": "={{ $json.id_user }}",
+              "type": "string"
+            },
+            {
+              "id": "27058e70-0e95-41d3-b105-42df994c9a3c",
+              "name": "message",
+              "value": "={{ $json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        -512
+      ],
+      "id": "11b137a0-2cb0-4568-ac82-b60fad226405",
+      "name": "User Var"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=user_id: {{ $('User Var').item.json.id_user }}\n\nSolicitu: {{ $('User Var').item.json.message }}",
+        "options": {
+          "systemMessage": "=Tu nombre es \"Par-0\"\nEres un asistente/coach de finanzas personales y en pareja que cuenta con multiples herramientas para cumplir con la solicitud del usuario.\n\nTono: Debe ser muy amable y cercano, debido a que son como amigos desde niño, pero al mismo tiempo debes ser como su voz de la conciencia.\n\nReglas:\n1. Ahora: {{ $now.toLocal().format('yyyy-MM-dd HH:mm:ss') }}\n\n2. Para usar las herramientas es necesario el id del usuario = {{ $('User Var').item.json.id_user }}\n\n3. Siempre debes priorizar el consultar la información atravez de la herramienta y solo en casos muy espesíficos usar la memoria (uso de herramientas).\n\n4. Siempre que el mensaje indique un registros de egreso ir a la herramienta \"DB Creation An Expense Agent\"\n\n5. En la respuesta omite el estado del egreso."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        2032,
+        -512
+      ],
+      "id": "0e5a3fa4-c078-40e4-b9bd-7ad23b387173",
+      "name": "Orquestador",
+      "retryOnFail": true,
+      "maxTries": 3
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1984,
+        -192
+      ],
+      "id": "6f93b2b7-c0de-4f30-ae67-260729c3cf5a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "772fMk1fdS3PfVpk",
+          "name": "OpenAi account Imagine"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        3456,
+        -496
+      ],
+      "id": "1e65cd49-6107-4a2b-8381-825f3e9493ec",
+      "name": "When chat message received",
+      "webhookId": "84d360cc-1eeb-4688-835b-c912f19ef230"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "id_user"
+            },
+            {
+              "name": "message"
+            },
+            {
+              "name": "sender"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1536,
+        -512
+      ],
+      "id": "41bab844-676f-4011-86a1-72a664e68023",
+      "name": "WH"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Puedes usar este nodo si quieres consultar acerca de recomendaciones para el usuario basadas en información suya o de internet (usa preplexiti).",
+        "text": "You are a financial assistant for Colombia’s middle class, able to provide savings and investment recommendations. Use the internet for up-to-date information, but also consider each person’s individual context. You will be approached by single mothers, restaurant employees, and small business owners.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        1904,
+        272
+      ],
+      "id": "adead2b1-1e2e-43df-a2d9-9f7b5848cc34",
+      "name": "AI Agent Tool"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Eres un coach financiero para personas y para parejas. Debes consultar información reciente y confiable en internet para darles recomendaciones según sus objetivos ya sea individuales o conjuntos. ",
+        "model": "sonar",
+        "messages": {
+          "message": [
+            {
+              "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message0_Text', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        2048,
+        720
+      ],
+      "id": "768c1ca8-6530-4b25-a69a-6ca4c818fe1a",
+      "name": "Message a model in Perplexity",
+      "credentials": {
+        "perplexityApi": {
+          "id": "pwbpz3r69sG1JXIQ",
+          "name": "Perplexity account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "WH": [
+      {
+        "json": {
+          "id_user": "29",
+          "message": "Registrar cena por $125000 con tarjeta débito el 2024-06-23",
+          "sender": "573134335040"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "DB Query Expenses And Icomes Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "DB Creation An Expense Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "DB Query Expenses And Icomes Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows table Expenses": {
+      "ai_tool": [
+        [
+          {
+            "node": "DB Query Expenses And Icomes Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows table INCOMES": {
+      "ai_tool": [
+        [
+          {
+            "node": "DB Query Expenses And Icomes Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "DB Creation An Expense Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an expense": {
+      "ai_tool": [
+        [
+          {
+            "node": "DB Creation An Expense Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an incomes": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "expense_categories_list": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "DB Creation An Expense Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "DB Query Expenses And Icomes Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "payment_methods_list": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "DB Creation An Expense Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "DB Query Expenses And Icomes Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DB Query Expenses And Icomes Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DB Creation An Expense Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Var": {
+      "main": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Orquestador": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH": {
+      "main": [
+        [
+          {
+            "node": "User Var",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orquestador",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model in Perplexity": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7545d270-7b35-4a51-8521-0c36b22b1532",
+  "meta": {
+    "instanceId": "c76afa9cff43306f36713e17f1fd1c999c9eb9417f2067b142cf9cd48e1a6d96"
+  },
+  "id": "XpWeWiviPwllGN3G",
+  "tags": []
+}

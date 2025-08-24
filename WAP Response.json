@@ -1,0 +1,709 @@
+{
+  "name": "WAP Response",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wh-hackaton",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -528,
+        -32
+      ],
+      "id": "ca968217-e4d9-4c36-9018-c8ced97d846f",
+      "name": "Webhook",
+      "webhookId": "205e5a8f-90b1-4c27-b9d2-f910a4c0dbe3"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1056,
+        -352
+      ],
+      "id": "656f336c-47fa-4112-969e-5f386a4076e5",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "772fMk1fdS3PfVpk",
+          "name": "OpenAi account Imagine"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "11dcc872-b2d3-44f9-afba-29021a7cd93b",
+              "name": "text",
+              "value": "={{ $json.textMessage }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        192
+      ],
+      "id": "e09b4808-3d23-4b73-af47-987809de7de0",
+      "name": "Get text message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6816cc95-2548-4337-a120-544b2d76300a",
+              "name": "type",
+              "value": "={{ $json.body.entry[0].changes[0].value.messages[0].type }}",
+              "type": "string"
+            },
+            {
+              "id": "b8be0bd1-fe12-4610-aa9c-4433e1d49739",
+              "name": "idMessage",
+              "value": "={{ $json.body.entry[0].changes[0].value.messages[0].audio.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dc0affbe-25bd-4893-9f02-17d85ada231d",
+              "name": "user",
+              "value": "={{ $json.body.entry[0].changes[0].value.contacts[0].profile.name }}",
+              "type": "string"
+            },
+            {
+              "id": "df289d13-6144-4585-8c5a-0fe9d87e6450",
+              "name": "textMessage",
+              "value": "={{ $json.body.entry[0].changes[0].value.messages[0].text.body }}",
+              "type": "string"
+            },
+            {
+              "id": "126b8b45-7918-4214-970a-69ded1bdbb37",
+              "name": "phoneNumber",
+              "value": "={{ $json.body.entry[0].changes[0].value.contacts[0].wa_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ef43eb6f-a3f4-4474-8aad-00ea3fa20aa7",
+              "name": "idMessageImage",
+              "value": "={{ $json.body.entry[0].changes[0].value.messages[0].image.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "53bcf6bc-9661-415c-be93-e669625a3cbb",
+      "name": "Format data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1184,
+        176
+      ],
+      "id": "7a9c458e-9a39-4e16-8e5a-2e968bbca01f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "784732a0-43db-4127-82f6-a55a44b6a78d",
+              "name": "id",
+              "value": "={{ $json.idMessage !== null ? $json.idMessage : $json.idMessageImage }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -208
+      ],
+      "id": "f3b0b0c8-2a0d-462b-8375-6850dd0bc1e6",
+      "name": "Get message id"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAANfoxhmrjoBOxYpGR4vEnDdQ7x2DsSu7f3XFOytxjFxOQKsUP7Sxm57f6lC5VwwiBtZBDNHNZAKuifEENuj04WYrPwNDIlaj5LGnby4j5TpZBFzltkVKSF0CqZAkMI0H3ZC8At7F6rqwK2YwWThoyTQ0wzPYSE1qQiZAokrUqshXVYfz3WZCM5YHOzY11NYKmrvwZDZD"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        272,
+        -208
+      ],
+      "id": "09f1cbed-dbec-4d2f-8663-82c64e40231a",
+      "name": "Get url file",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Authorization\": \"Bearer EAANfoxhmrjoBOxYpGR4vEnDdQ7x2DsSu7f3XFOytxjFxOQKsUP7Sxm57f6lC5VwwiBtZBDNHNZAKuifEENuj04WYrPwNDIlaj5LGnby4j5TpZBFzltkVKSF0CqZAkMI0H3ZC8At7F6rqwK2YwWThoyTQ0wzPYSE1qQiZAokrUqshXVYfz3WZCM5YHOzY11NYKmrvwZDZD\"\n}\n",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        -208
+      ],
+      "id": "2bca0c6f-2b8f-45c4-b1f9-4d7b893b5c5c",
+      "name": "Get file",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "Extract all the visible text from the image. \nReturn only the text content, exactly as it appears, without adding explanations, formatting, or translations. \nDo not include anything other than the extracted text.",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1056,
+        -144
+      ],
+      "id": "5a9713e7-5113-4569-aefe-5e24dda13fc8",
+      "name": "Analyze image",
+      "credentials": {
+        "openAiApi": {
+          "id": "772fMk1fdS3PfVpk",
+          "name": "OpenAi account Imagine"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "04ade200-a2ef-46c0-9b86-605001b34a1a",
+              "name": "text",
+              "value": "={{ $('Format data').item.json.type == 'image' ? $json.content : $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1344,
+        -144
+      ],
+      "id": "49e734d3-949c-4d4f-8b3b-1693be2d9ae0",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/614145445111849/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Format data').item.json.phoneNumber }}\",\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": \"Hola, acá te respondo, lo que me escribiste fue: {{ $json.text.replace(/\\n/g, \" \") }} \"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1632,
+        -304
+      ],
+      "id": "99e1e6f5-9ee7-49c3-b42c-8f0e937978ba",
+      "name": "Response message",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94411f0b-a663-467a-99ee-78e574ac6b20",
+              "leftValue": "={{ $('Format data').item.json.type }}",
+              "rightValue": "audio",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        -208
+      ],
+      "id": "ed9ee8d6-8106-48ba-9238-cbb4bb992a40",
+      "name": "Validate kind of message"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ [\"audio\", \"image\"].includes($json.type) }}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "ef676f16-fc73-4da6-a218-a03c5c7a20a9"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8aa395c8-e14d-417c-a5d9-c1ef434a4841",
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -144,
+        -32
+      ],
+      "id": "c85b9c41-060d-48fc-bd00-322d9e195251",
+      "name": "Validate kind of message1"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.entry[0].changes[0].value.contacts[0].wa_id }}",
+        "textBody": "=Recibí tu mensaje, lo estoy procesando...",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        176
+      ],
+      "id": "575d8107-3b90-48cc-9ee6-eb5177fddcb3",
+      "name": "Send message",
+      "webhookId": "a0b6c7ca-643d-4a5f-972d-23109a5780fa",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "4hvw6lJr0fn61qk7",
+          "mode": "list",
+          "cachedResultName": "Par0 Entendimiento De Mensaje"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sender": "={{ $json.contacts[0].wa_id }}",
+            "message": "={{ $('Merge').item.json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "sender",
+              "displayName": "sender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1664,
+        176
+      ],
+      "id": "0bdd2738-8640-4e57-8992-3e9727e3777a",
+      "name": "Execute Par 0"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "connection": "upgrade",
+            "host": "n8n-develop.imagineapps.co",
+            "x-real-ip": "34.98.140.10",
+            "x-forwarded-for": "2a03:2880:21ff:1:0:0:0:0, 34.98.140.10",
+            "x-forwarded-proto": "https",
+            "content-length": "508",
+            "content-type": "application/json",
+            "user-agent": "Mozilla/5.0 (compatible; Google-Apps-Script; beanserver; +https://script.google.com; id: UAEmdDd_CxR38fCB5Ki1W0To1r9672LGo2w)",
+            "accept-encoding": "gzip, deflate, br"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "object": "whatsapp_business_account",
+            "entry": [
+              {
+                "id": "3827440200905116",
+                "changes": [
+                  {
+                    "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                        "display_phone_number": "573138867064",
+                        "phone_number_id": "614145445111849"
+                      },
+                      "contacts": [
+                        {
+                          "profile": {
+                            "name": "Luis J"
+                          },
+                          "wa_id": "573104751978"
+                        }
+                      ],
+                      "messages": [
+                        {
+                          "from": "573104751978",
+                          "id": "wamid.HBgMNTczMTA0NzUxOTc4FQIAEhggMDhDM0ZCMDc3ODc4QUU1MTJEOUQyMjJFQkM0OTA3RTcA",
+                          "timestamp": "1756044637",
+                          "text": {
+                            "body": "Hola, que puedes realizar?"
+                          },
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "field": "messages"
+                  }
+                ]
+              }
+            ]
+          },
+          "webhookUrl": "https://n8n-develop.imagineapps.co/webhook/wh-hackaton",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Format data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format data": {
+      "main": [
+        [
+          {
+            "node": "Validate kind of message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get text message": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get message id": {
+      "main": [
+        [
+          {
+            "node": "Get url file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get url file": {
+      "main": [
+        [
+          {
+            "node": "Get file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get file": {
+      "main": [
+        [
+          {
+            "node": "Validate kind of message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate kind of message": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate kind of message1": {
+      "main": [
+        [
+          {
+            "node": "Get message id",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response message": {
+      "main": [
+        []
+      ]
+    },
+    "Send message": {
+      "main": [
+        [
+          {
+            "node": "Execute Par 0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "87b91f42-721b-48dd-8de0-41e1e57b110b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c76afa9cff43306f36713e17f1fd1c999c9eb9417f2067b142cf9cd48e1a6d96"
+  },
+  "id": "NyBRueVaihXF8wer",
+  "tags": [
+    {
+      "createdAt": "2025-08-07T11:31:43.799Z",
+      "updatedAt": "2025-08-07T11:31:43.799Z",
+      "id": "Vd1DFoGO6rsKJ36h",
+      "name": "DONE"
+    }
+  ]
+}

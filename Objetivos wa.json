@@ -1,0 +1,554 @@
+{
+  "name": "Objetivos wa",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "¡Hablemos de tus objetivos!...",
+        "formDescription": "Como tu Par-0 es muy importante para mi conocer más sobre tus objetivos al rededor de tus finanzas.",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn\n"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -752,
+        528
+      ],
+      "id": "cfc2938e-e8ce-45d6-bc49-9dc49b412f37",
+      "name": "On form submission",
+      "webhookId": "c36a8f78-ca56-435b-84ef-8d9e57a0793e"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "persona",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "934ff075-3452-4958-9829-c64cbd9dee28"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ac527298-339c-4b42-a0ec-1f6f36f5df92",
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "pareja",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -304,
+        528
+      ],
+      "id": "a9a2b6b4-f007-46f7-8219-5df1d296f34b",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Un numero ingresado ya existe",
+        "completionMessage": "No se ha podido registrar a un usuario",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        672,
+        848
+      ],
+      "id": "cae51221-f67a-48b9-8a46-d7bda42d1530",
+      "name": "Form2",
+      "webhookId": "8dcedb44-be9d-4faf-9643-157748d9252a",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "¡Gracias por contarme! Me alegra saber más de ustedes",
+        "completionMessage": "El hecho de que quieran trabajar en sus finanzas de pareja habla mucho de ustedes. ¡Acá estoy para acompañarlos!",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        816,
+        608
+      ],
+      "id": "696fb38c-db4a-4a8a-b2be-b2ca87d22df9",
+      "name": "Form3",
+      "webhookId": "8dcedb44-be9d-4faf-9643-157748d9252a"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "¡Gracias por contarme! Me alegra saber más de ti",
+        "completionMessage": "Con determinación, constancia y buenas herramientas vas a lograr todas tus metas! Me alegra ser tu par-0 en este camino financiero",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        656,
+        352
+      ],
+      "id": "cb03e0bd-2c96-4872-bf19-8d149ce34b84",
+      "name": "Form4",
+      "webhookId": "23c953b8-9dd9-452a-8ef4-6108cc6c85c8"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Tu primer objetivo"
+            },
+            {
+              "fieldLabel": "¿Cada cuánto quieres que lo hablemos? Ponlo en días",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Fecha del objetivo",
+              "fieldType": "date"
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 2,
+        "resumeUnit": "minutes",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        336
+      ],
+      "id": "78d6e3a8-0586-4dca-99b2-a011e0d5e8c1",
+      "name": "Personales",
+      "webhookId": "ae13bfc1-6cc4-464d-afc1-64d8f483b460"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Su primer objetivo"
+            },
+            {
+              "fieldLabel": "¿Cada cuánto quieren que lo hablemos? Ponlo en días",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Fecha de su objetivo",
+              "fieldType": "date"
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 2,
+        "resumeUnit": "minutes",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        624
+      ],
+      "id": "befed12e-6c99-4ab9-8187-60be43ea5a61",
+      "name": "En pareja",
+      "webhookId": "ccf9490c-b727-42a6-ba9e-f9b3634bf159"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "18747b3c-5e26-46ad-af35-f37a76aa96d0",
+              "name": "type",
+              "value": "={{ $json?.formQueryParameters?.type }}",
+              "type": "string"
+            },
+            {
+              "id": "3b1dbf98-fc52-4165-98ec-498954cb3163",
+              "name": "user1",
+              "value": "={{ $json?.formQueryParameters?.user1 }}",
+              "type": "string"
+            },
+            {
+              "id": "8d25b033-13d9-45df-bb68-3e5e80d6d443",
+              "name": "user2",
+              "value": "={{ $json?.formQueryParameters?.user2 }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -528,
+        528
+      ],
+      "id": "40582408-e8e6-4e61-8e4d-8aa256ad6843",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "users",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone_number",
+              "keyValue": "={{ $('Edit Fields').item.json.user1 }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        128,
+        336
+      ],
+      "id": "3c4805fe-b8d5-4272-9348-45089f7d2d27",
+      "name": "Get a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "goals",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "start_date_goal",
+              "fieldValue": "={{ $('Personales').item.json['Fecha del objetivo'] }}"
+            },
+            {
+              "fieldId": "context_goal",
+              "fieldValue": "={{ $('Personales').item.json['Tu primer objetivo'] }}"
+            },
+            {
+              "fieldId": "id_user",
+              "fieldValue": "={{ $json.id_user }}"
+            },
+            {
+              "fieldId": "status_goal",
+              "fieldValue": "To start"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        384,
+        336
+      ],
+      "id": "32518e6a-511d-4e9e-9b6c-36e05cb5526b",
+      "name": "Create a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "users",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone_number",
+              "keyValue": "={{ $('Edit Fields').item.json.user1 }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        144,
+        624
+      ],
+      "id": "341d3833-decd-4868-9cb0-809c53bd1e17",
+      "name": "Get a user 1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "groups",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id_user",
+              "keyValue": "={{ $json.id_user }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        352,
+        624
+      ],
+      "id": "f79c2025-152c-4c72-b534-9e642e605b3d",
+      "name": "Get group couple",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "groups_goals",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "id_couple",
+              "fieldValue": "={{ $json.id_couple }}"
+            },
+            {
+              "fieldId": "goal_group_context",
+              "fieldValue": "={{ $('En pareja').item.json['Su primer objetivo'] }}"
+            },
+            {
+              "fieldId": "id_user",
+              "fieldValue": "={{ $json.id_user }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        560,
+        624
+      ],
+      "id": "c64e9ca4-4616-490c-9fc7-f1d821650ef7",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "submittedAt": "2025-08-24T10:40:34.144-04:00",
+          "formMode": "production",
+          "formQueryParameters": {
+            "type": "pareja",
+            "user1": "573133208416",
+            "user2": "573212261184"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Personales",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "En pareja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form3": {
+      "main": [
+        []
+      ]
+    },
+    "Personales": {
+      "main": [
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "En pareja": {
+      "main": [
+        [
+          {
+            "node": "Get a user 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "Create a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row2": {
+      "main": [
+        [
+          {
+            "node": "Form4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a user 1": {
+      "main": [
+        [
+          {
+            "node": "Get group couple",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get group couple": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Form3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4ba13857-da2c-47f0-a8fe-24da08f9e22a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c76afa9cff43306f36713e17f1fd1c999c9eb9417f2067b142cf9cd48e1a6d96"
+  },
+  "id": "kUWBVeTJTggHysu3",
+  "tags": []
+}

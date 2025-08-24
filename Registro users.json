@@ -1,0 +1,1110 @@
+{
+  "name": "Registro users",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.userType }}",
+                    "rightValue": "pareja",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "934ff075-3452-4958-9829-c64cbd9dee28"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ac527298-339c-4b42-a0ec-1f6f36f5df92",
+                    "leftValue": "={{ $json.userType }}",
+                    "rightValue": "persona",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -352,
+        144
+      ],
+      "id": "8ed5a5c0-ddc4-4bf5-b695-dd5821f8268f",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "phone number",
+              "fieldType": "number"
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 2,
+        "resumeUnit": "minutes",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        240
+      ],
+      "id": "bf903582-aa68-436c-bb38-350deec5ee44",
+      "name": "Persona",
+      "webhookId": "ccf9490c-b727-42a6-ba9e-f9b3634bf159"
+    },
+    {
+      "parameters": {
+        "tableId": "users",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone_number",
+              "fieldValue": "={{\n  (() => {\n    // 1. Tomar el campo y asegurarse de que es string\n    let p = $json['phone number'].toString().trim();\n\n    // 2. Quitar '+' al inicio (si existe)\n    if (p.startsWith('+')) {\n      p = p.slice(1);\n    }\n\n    // 3. Eliminar todo lo que no sea dígito\n    p = p.replace(/\\D/g, '');\n\n    // 4. Si quedan 10 dígitos, anteponer '57'\n    if (p.length === 10) {\n      return `57${p}`;\n    }\n\n    // 5. En cualquier otro caso (más de 10 dígitos), devolver tal cual\n    return p;\n  })()\n}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        96,
+        240
+      ],
+      "id": "90d4b012-fdfd-48b4-958b-dbf44222a0ed",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your Phone Number",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "Your Couple Number",
+              "fieldType": "number"
+            }
+          ]
+        },
+        "limitWaitTime": true,
+        "resumeAmount": 2,
+        "resumeUnit": "minutes",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        -48
+      ],
+      "id": "ab1825d7-d875-43ff-90d1-100092a0c765",
+      "name": "Form",
+      "webhookId": "ae13bfc1-6cc4-464d-afc1-64d8f483b460"
+    },
+    {
+      "parameters": {
+        "tableId": "users",
+        "dataToSend": "=defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone_number",
+              "fieldValue": "={{ $('Loop Over Items').item.json.phone_number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2128,
+        160
+      ],
+      "id": "8c2a641e-eccc-48dd-af0d-590dfd115582",
+      "name": "Create a row1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Leer y convertir a string\nconst rawPrimary = $('Form').first().json['Your Phone Number'].toString().trim();\nconst rawCouple  = $('Form').first().json['Your Couple Number'].toString().trim();\n\n// 2. Función de normalización (igual a la que ya tienes)\nfunction normalize(p) {\n  let str = p.startsWith(\"+\") ? p.slice(1) : p;\n  str = str.replace(/\\D/g, \"\");\n  return str.length === 10 ? `57${str}` : str;\n}\n\n// 3. Obtener valores limpios\nconst primary = normalize(rawPrimary);\nconst couple  = normalize(rawCouple);\n\n// 4. Devolver dos items — n8n iterará uno a uno\nreturn [\n  { json: { phone_number: primary } },\n  { json: { phone_number: couple  } },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        -48
+      ],
+      "id": "fbc804f4-ffd1-492e-b6c4-e6040dd7e6e3",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "tableId": "groups",
+        "dataToSend": "=defineBelow",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "id_user",
+              "fieldValue": "={{ $json.data.first().id_user }}"
+            },
+            {
+              "fieldId": "id_couple",
+              "fieldValue": "={{ $json.data.last().id_user }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        -80
+      ],
+      "id": "4a7e9c63-61cf-4239-b7d4-edd79901f9d9",
+      "name": "Create a row2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Un numero ingresado ya existe",
+        "completionMessage": "No se ha podido registrar a un usuario",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        384,
+        416
+      ],
+      "id": "8971ce68-77e1-4aa2-8323-7446ab4b252a",
+      "name": "Form2",
+      "webhookId": "8dcedb44-be9d-4faf-9643-157748d9252a"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Tu numero ha sido registrado",
+        "completionMessage": "PAR-0 Se pondrá en contacto contigo pronto",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        416,
+        176
+      ],
+      "id": "5d9d2c08-61e2-42d8-b0b3-ac062331f310",
+      "name": "Form3",
+      "webhookId": "8dcedb44-be9d-4faf-9643-157748d9252a"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Felicidades, tu pareja ha sido registrada",
+        "completionMessage": "Tú y tu pareja ahora son PAR-0, felicidades",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        -128
+      ],
+      "id": "afded47d-16d2-4609-8a52-02b21afb61d2",
+      "name": "Form5",
+      "webhookId": "8dcedb44-be9d-4faf-9643-157748d9252a"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "La pareja ya existe",
+        "completionMessage": "Disfruta de PAR-0 con tu pareja",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        112
+      ],
+      "id": "160c8fb7-f879-4992-a1ab-229e78d798e1",
+      "name": "Form1",
+      "webhookId": "ad5a7d97-5aa2-4a4b-9308-d9d628dcafbf"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "users",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone_number",
+              "keyValue": "={{ $json.phone_number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        48
+      ],
+      "id": "b70f9065-0c8b-4de1-873d-e507f0ed7910",
+      "name": "Get a row",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f7f6dc64-3342-46ad-bd83-2d8971b228d4",
+              "leftValue": "={{ $json.id_user }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1904,
+        96
+      ],
+      "id": "e722ec48-3d8e-4572-8c8c-8395ff0264ba",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1104,
+        -48
+      ],
+      "id": "bc76a47f-8966-4359-a797-ceca8a508d27",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        -112
+      ],
+      "id": "557c0065-afde-4dbd-bcbb-138509e0feaf",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "82bbe1cc-db52-4fb4-8499-c79fb05aee05",
+              "leftValue": "={{ $json[\"Your Phone Number\"] }}",
+              "rightValue": "={{ $json[\"Your Couple Number\"] }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        -48
+      ],
+      "id": "72c9397b-f146-4743-b3b4-c1f44fbca207",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Ups no puedes ser tu propia pareja",
+        "completionMessage": "Busca un PAR-0 con el cual compartir tus finanzas",
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -240
+      ],
+      "id": "32466dce-ecb9-45ab-901c-5cf761329ea8",
+      "name": "Form4",
+      "webhookId": "23c953b8-9dd9-452a-8ef4-6108cc6c85c8"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $json.phone_number }}",
+        "template": "hackaton|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "pues, cómo te ha ido?"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        688,
+        176
+      ],
+      "id": "997bdfda-5185-4912-a403-22c3d1d4d771",
+      "name": "Send template",
+      "webhookId": "12f70916-1eb5-4475-a858-4f98de561e51",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $('Aggregate').item.json.data[0].phone_number }}",
+        "template": "hackaton|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "pues, cómo te ha ido?"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        -240
+      ],
+      "id": "5ae92b0b-9cff-41cd-bd1a-e17ab3421f83",
+      "name": "Send template1",
+      "webhookId": "12f70916-1eb5-4475-a858-4f98de561e51",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $('Aggregate').item.json.data[1].phone_number }}",
+        "template": "hackaton|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "pues, cómo te ha ido?"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        -48
+      ],
+      "id": "bb922b8c-111c-4750-85fd-d5859651a5c5",
+      "name": "Send template2",
+      "webhookId": "12f70916-1eb5-4475-a858-4f98de561e51",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3152,
+        112
+      ],
+      "id": "1f1030b7-0635-4b11-b4d5-9a96942b71d5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $('Merge').item.json.contacts[0].wa_id }}",
+        "textBody": "=Antes de empezar, dinos tus objetivos: https://n8n-develop.imagineapps.co/form/c36a8f78-ca56-435b-84ef-8d9e57a0793e?type={{ $('Format user type').item.json.userType }}{{ $json.urlUser }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        4160,
+        0
+      ],
+      "id": "1271f822-2465-41dd-bf60-e5d0a69526c2",
+      "name": "Send message",
+      "webhookId": "31d93876-c0f8-4a74-8c7a-78919a045404",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a7e5828b-5bf8-464c-8b28-f7d2ec2b5202",
+              "name": "userType",
+              "value": "={{ $json['Tipo de usuario'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -592,
+        144
+      ],
+      "id": "e9afacbb-429f-441e-b6c3-a13bff2730aa",
+      "name": "Format user type"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "03c73c9a-8bbb-402e-bde7-a4906a82dafd",
+              "leftValue": "={{ $('Format user type').item.json.userType == 'pareja' }}",
+              "rightValue": "pareja",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3376,
+        128
+      ],
+      "id": "4166a6d0-2e55-43b0-94d3-e415ea0606c2",
+      "name": "If url users"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb14c323-183a-4726-b58c-0e3f41fc33a2",
+              "name": "urlUser",
+              "value": "=&user1={{ $json.contacts[0].wa_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3664,
+        176
+      ],
+      "id": "6249d825-7d8b-49ec-8c41-84ed29ed7a87",
+      "name": "url user"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "eb14c323-183a-4726-b58c-0e3f41fc33a2",
+              "name": "urlUser",
+              "value": "=&user1={{ $('Aggregate').item.json.data[0].phone_number }}&user2={{ $('Aggregate').item.json.data[1].phone_number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3664,
+        -96
+      ],
+      "id": "81ace680-5225-48ab-b629-827282a14ace",
+      "name": "url users"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3872,
+        32
+      ],
+      "id": "065a28be-8253-4c18-890f-3ffe954c0714",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "formTitle": "Empieza a gestionar tus finanzas - Regístrate",
+        "formDescription": "Tu parcero financiero con IA contactara contigo",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Tipo de usuario",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "pareja"
+                  },
+                  {
+                    "option": "persona"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -976,
+        304
+      ],
+      "id": "b12b2ac1-c98c-4e20-81f0-d65c0fd6943a",
+      "name": "On form submission12",
+      "webhookId": "c36a8f78-ca56-435b-84ef-8d9e57a0793e",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "formTitle": "Empieza a gestionar tus finanzas - Regístrate",
+        "formDescription": "Tu parcero financiero con IA contactara contigo",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Tipo de usuario",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "pareja"
+                  },
+                  {
+                    "option": "persona"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "customCss": ":root {\n  /* ===== Brand ===== */\n  --brand-primary: #6E37E4; /* morado */\n  --brand-accent:  #13D3E5; /* cian */\n\n  /* ===== Tipografía ===== */\n  --font-family: 'Open Sans', sans-serif;\n  --font-weight-normal: 400;\n  --font-weight-bold: 600;\n  --font-size-body: 12px;\n  --font-size-label: 14px;\n  --font-size-test-notice: 12px;\n  --font-size-input: 14px;\n  --font-size-header: 20px;\n  --font-size-paragraph: 14px;\n  --font-size-link: 12px;\n  --font-size-error: 12px;\n  --font-size-html-h1: 28px;\n  --font-size-html-h2: 20px;\n  --font-size-html-h3: 16px;\n  --font-size-html-h4: 14px;\n  --font-size-html-h5: 12px;\n  --font-size-html-h6: 10px;\n  --font-size-subheader: 14px;\n\n  /* ===== Colores ===== */\n  --color-background: #fbfcfe;\n  --color-card-bg: #ffffff;\n  --color-card-border: #dbdfe7;\n  --color-card-shadow: rgba(110, 55, 228, 0.10); /* sombreado con tu primario */\n\n  --color-header: #2f1f6a;          /* primario oscurecido p/ títulos */\n  --color-header-subtext: #7e8186;  /* gris legible */\n  --color-html-text: #555;\n\n  --color-link: var(--brand-primary);\n  --color-html-link: var(--brand-primary);\n\n  --color-input-border: #dbdfe7;\n  --color-input-text: #71747A;\n  --color-focus-border: var(--brand-primary);\n\n  --color-submit-btn-bg: var(--brand-primary);\n  --color-submit-btn-text: #ffffff;\n  /* hover/focus (fijo para emails que no soportan :hover dinámico) */\n  --color-submit-btn-bg-hover: #5a2fd0; /* primario ~12% más oscuro */\n\n  --color-clear-button-bg: var(--brand-accent);\n\n  --color-required: var(--brand-primary);\n  --color-error: #ea1f30; /* conserva rojo para estados de error (semántica) */\n\n  /* Avisos (mapeados a tu acento; si prefieres “warning” ámbar, ver nota abajo) */\n  --color-test-notice-text: #0b6e78; /* cian oscuro legible */\n  --color-test-notice-bg:   #e6fbfe; /* cian muy claro */\n  --color-test-notice-border: #a7edf5;\n\n  /* ===== Radios ===== */\n  --border-radius-card: 8px;\n  --border-radius-input: 6px;\n  --border-radius-clear-btn: 50%;\n  --card-border-radius: 8px;\n\n  /* ===== Espaciado ===== */\n  --padding-container-top: 24px;\n  --padding-card: 24px;\n  --padding-test-notice-vertical: 12px;\n  --padding-test-notice-horizontal: 24px;\n  --margin-bottom-card: 16px;\n  --padding-form-input: 12px;\n  --card-padding: 24px;\n  --card-margin-bottom: 16px;\n\n  /* ===== Dimensiones ===== */\n  --container-width: 448px;\n  --submit-btn-height: 48px;\n  --checkbox-size: 18px;\n\n  /* ===== Otros ===== */\n  --box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n  --opacity-placeholder: 0.5;\n}\n"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -816,
+        144
+      ],
+      "id": "75a6b3e5-b05e-4582-a2cd-595a9db91f6c",
+      "name": "On form submission",
+      "webhookId": "287d7cf2-41c0-41a6-ba2d-e1651bd54d1e"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Persona",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persona": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Form3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Form2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row2": {
+      "main": [
+        [
+          {
+            "node": "Form5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Create a row2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Form4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form3": {
+      "main": [
+        [
+          {
+            "node": "Send template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form5": {
+      "main": [
+        [
+          {
+            "node": "Send template1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send template2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send template1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Send template2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If url users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format user type": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If url users": {
+      "main": [
+        [
+          {
+            "node": "url users",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "url user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "url user": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "url users": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission12": {
+      "main": [
+        []
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Format user type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "75c4baea-620b-4562-9d95-21cfce7f4f66",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c76afa9cff43306f36713e17f1fd1c999c9eb9417f2067b142cf9cd48e1a6d96"
+  },
+  "id": "nx2zFyHeCkSLhoH1",
+  "tags": []
+}

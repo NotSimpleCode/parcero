@@ -1,0 +1,270 @@
+{
+  "name": "Reminders",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9a61ebe8-bc66-4ecc-b927-99f7f2c9f246",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "users_reminders",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status_user_reminder",
+              "condition": "eq",
+              "keyValue": "A"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -16
+      ],
+      "id": "43693d33-fecd-453d-816f-60ad989c095d",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2662220d-2446-4be1-a93d-1efb0d8bcd49",
+              "leftValue": "={{ Number(new Date($json.date_user_reminder)).toDateTime()}}",
+              "rightValue": "={{ $now}}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        -128
+      ],
+      "id": "2a4d61d3-6d49-4260-a07b-599679530565",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "users_reminders",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id_user",
+              "condition": "eq",
+              "keyValue": "={{ $json.id_user }}"
+            },
+            {
+              "keyName": "id_reminder",
+              "condition": "eq",
+              "keyValue": "={{ $('If').item.json.id_reminder }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "date_user_reminder",
+              "fieldValue": "={{\n  $now\n    .plus({\n      minutes: parseInt(\n        $('Get many rows').item.json.frequency_reminder,\n        10\n      )\n    })\n    .toISO()\n}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        32
+      ],
+      "id": "056c44aa-52be-46cf-850d-132ccc80a98a",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "users",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id_user",
+              "condition": "eq",
+              "keyValue": "={{ $json.id_user }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -32
+      ],
+      "id": "3135a416-dd54-40f3-b245-181ae31cb422",
+      "name": "Get many rows1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "614145445111849",
+        "recipientPhoneNumber": "={{ $json.phone_number }}",
+        "template": "recordatorios|en"
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -208
+      ],
+      "id": "e13cfe86-b7bf-4b37-8797-c986055a8969",
+      "name": "Send template",
+      "webhookId": "7055e0bb-89bd-423b-834f-174b9dc3a5ea",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "LcqpAJZFRY04yUCG",
+          "name": "WhatsApp account Oficial"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-08-24T08:57:35.004-05:00",
+          "Readable date": "August 24th 2025, 8:57:35 am",
+          "Readable time": "8:57:35 am",
+          "Day of week": "Sunday",
+          "Year": "2025",
+          "Month": "August",
+          "Day of month": "24",
+          "Hour": "08",
+          "Minute": "57",
+          "Second": "35",
+          "Timezone": "America/Bogota (UTC-05:00)"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get many rows1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        []
+      ]
+    },
+    "Get many rows1": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Bogota",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "473e7042-82b4-4cab-999e-a7f255fe2530",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c76afa9cff43306f36713e17f1fd1c999c9eb9417f2067b142cf9cd48e1a6d96"
+  },
+  "id": "VnC97YCSzxe8ShAo",
+  "tags": []
+}

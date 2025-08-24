@@ -1,0 +1,691 @@
+{
+  "name": "Par0 Entendimiento De Mensaje",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        160
+      ],
+      "id": "5637da20-5522-4802-8356-e95f8795a2bb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "772fMk1fdS3PfVpk",
+          "name": "OpenAi account Imagine"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "message"
+            },
+            {
+              "name": "sender"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2064,
+        -416
+      ],
+      "id": "773ae4e0-116f-498b-8a4a-4859ee4044cb",
+      "name": "WH"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2064,
+        -96
+      ],
+      "id": "f724531a-afb5-44e0-a230-2b0434c03cf2",
+      "name": "When chat message received",
+      "webhookId": "817abc39-7d56-4d06-92e3-b3d5e4e034bc"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "users",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone_number",
+              "keyValue": "={{ $('WH').item.json.sender }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1840,
+        -416
+      ],
+      "id": "cfcbada9-9aec-4370-aee7-8299c43ac45c",
+      "name": "Get id_user",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "groups",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id_user",
+              "keyValue": "={{ $('Get id_user').item.json.id_user }}"
+            },
+            {
+              "keyName": "status_group",
+              "keyValue": "A"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        -512
+      ],
+      "id": "43f3dbf4-3036-4dca-a3f0-2a0ad97b70ac",
+      "name": "Get Pareja By Id User",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "groups",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id_couple",
+              "keyValue": "={{ $('Get id_user').item.json.id_user }}"
+            },
+            {
+              "keyName": "status_group",
+              "keyValue": "A"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        -320
+      ],
+      "id": "153681bb-bb5a-412a-886a-51416d1a46f0",
+      "name": "Get Pareja By Id Couple",
+      "alwaysOutputData": false,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ekLnDbuu179q3VZ8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1392,
+        -416
+      ],
+      "id": "10815dff-0635-4fd8-b510-e08e121d9e26",
+      "name": "Merge Pareja",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=user_id: {{ $('Code Defind Couple').item.json.user_id }}\ncouple_id: {{ $('Code Defind Couple').item.json.couple_id }}\n\nmessage to be classified: {{ $('WH').first().json.message }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Clasifique el texto proporcionado por el usuario en una de las siguientes categorias: personales o pareja, y utilice las instrucciones de formato que se indican a continuación. No dé explicaciones, solo genere el json.\n\nTempresente que si un numero no esta sociado a una pareja, el camino o categoría sera \"personales\", pero si este usuario si cuenta con una pareja se le tendencia estará a finanzas en pareja.\n\nCategories\nCategory\npersonales\nDescription\nEs para aquellos textos que revelen una intensión ya sea de consulta, de registro de ingresos o de registro de gastos de forma individual\nCategory\npareja\nDescription\nEs para aquellos textos en los que se revele intensión de registrar gastos en conjunto, solo gastos. Por ejemplo, hablar en plural como \"compramos\" o \"mi pareja y yo\" o \"yo gasté $x y mi pareja $y\"\n\nAdvertencia:\ntener en cuenta el último mensaje del contexto y su clasificacion."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -944,
+        -416
+      ],
+      "id": "2ef9f0e6-e839-401e-ad23-98ff9503c273",
+      "name": "AI Agent Defind couple or single"
+    },
+    {
+      "parameters": {
+        "jsCode": "const user_id = $('Get id_user')?.first()?.json?.id_user || '';\n\nconst user_id_response = $('Merge Pareja')?.first()?.json?.id_user || '';\n\nif (!user_id_response) return [{user_id, couple_id: \"no cuenta con pareja\"}];\n\nconst couple_id_response = $('Merge Pareja').first().json.id_couple;\n\nconst couple_id = (user_id === user_id_response) ? couple_id_response : user_id_response;\n\nreturn [{user_id, couple_id}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1168,
+        -416
+      ],
+      "id": "6b11d6c2-b772-4d3f-a853-57ee012ef5dd",
+      "name": "Code Defind Couple"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n    \"additionalProperties\": false,\n    \"required\": [\"categoria\"],\n\t\"properties\": {\n\t\t\"categoria\": {\n\t\t\t\"type\": \"string\",\n            \"enum\": [\"personal\", \"pareja\"]\n\t\t}\n\t}\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -912,
+        -112
+      ],
+      "id": "f0009ef8-168c-4aa2-8203-cb9dd4fbeda6",
+      "name": "Structured Output Parser",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4472e545-47df-4907-a33e-1a55982e5b12",
+              "leftValue": "={{ $('AI Agent Defind couple or single')?.first()?.json?.output?.categoria ||  ''}}",
+              "rightValue": "pare",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "db92140c-732f-48c0-b325-1b7e62e22d29",
+              "leftValue": "={{$('AI Agent Defind couple or single')?.first()?.json?.output}}",
+              "rightValue": "pareja",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -544,
+        -416
+      ],
+      "id": "fb4f6a04-927a-44a0-ae98-a3959da7bac5",
+      "name": "If Pareja"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=user_id: {{ $('Code Defind Couple').item.json.user_id }}\ncouple_id: {{ $('Code Defind Couple').item.json.couple_id }}\n\nuser message: {{ $('WH').first().json.message }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Consideraciones: \n1. Si no se define cuanto debe pagar cada quien, entonces se calcula dividiendo el gasto compartido por el usuario entre dos.\n\n2. El \"message\" debe ser muy conciso y preciso. para esa variable \"message\" solo debe incluir el producto, valor individual, método de pago y fecha y el mensaje debe ser una acción por ejecutar.\n\n4. No se debe incluir en el message el valor total, solo el individual."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        -592
+      ],
+      "id": "a3f55d56-5244-4d73-a7eb-a44a52eeac9d",
+      "name": "AI Agente Multiplicador de ejecuciones"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "={\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"messages\"],\n  \"properties\": {\n    \"messages\": {\n      \"type\": \"array\",\n      \"minItems\": 2,\n      \"maxItems\": 2,\n      \"items\": {\n        \"type\": \"object\",\n        \"additionalProperties\": false,\n        \"required\": [\"id_user\", \"message\"],\n        \"properties\": {\n          \"id_user\": { \"type\": \"string\" },\n          \"message\": {\n            \"type\": \"string\",\n            \"minLength\": 10,\n            \"maxLength\": 120,\n            \"description\": \"Formato exacto: 'Registrar <producto> por <valor> con <método> el <fecha>'. Solo producto, valor individual, método de pago y fecha.\",\n            \"pattern\": \"^Registrar\\\\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9\\\\-\\\\s]{1,40}\\\\s+por\\\\s+(?:\\\\$?\\\\d{1,3}(?:[.,]\\\\d{3})*(?:[.,]\\\\d{2})?|\\\\$?\\\\d+(?:[.,]\\\\d{2})?)\\\\s+con\\\\s+[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\\\\-\\\\s]{2,40}\\\\s+el\\\\s+(?:\\\\d{4}-\\\\d{2}-\\\\d{2}|\\\\d{2}\\\\/\\\\d{2}\\\\/\\\\d{4})$\"\n          }\n        }\n      }\n    }\n  },\n  \"examples\": [\n    {\n      \"messages\": [\n        { \"id_user\": \"u-123\", \"message\": \"Registrar donas por $5000 con tarjeta debito el 2025-08-24\" },\n        { \"id_user\": \"u-456\", \"message\": \"Registrar caldo de pollo por 5000 con efectivo el 24/08/2025\" }\n      ]\n    }\n  ]\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        -288
+      ],
+      "id": "4fcd3b61-2c3d-4a0f-b7d7-25087587e32e",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -368
+      ],
+      "id": "334e4652-ab2b-420b-974b-1969d7147c08",
+      "name": "Calculator1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst messages = $input.first().json.output.messages;\n\nreturn messages.map(item => ({id_user: item.id, message: item.message}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        -592
+      ],
+      "id": "e7c70843-9af8-4bfa-9b09-d7463fc43596",
+      "name": "Two Users"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "XpWeWiviPwllGN3G",
+          "mode": "list",
+          "cachedResultName": "P0"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_user": "={{ $json.id_user }}",
+            "message": "={{ $json.message }}",
+            "sender": "={{ $('WH').item.json.sender }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_user",
+              "displayName": "id_user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "sender",
+              "displayName": "sender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1024,
+        -416
+      ],
+      "id": "e10666e5-d44a-4f98-a12b-26bbb54fc9bd",
+      "name": "Execute P0"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WH').item.json.sender }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -464,
+        -48
+      ],
+      "id": "0d3987a9-202f-4ad4-9245-1389f06adeda",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "YQzRz6REQ3youBfe",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        576,
+        -416
+      ],
+      "id": "bb18686d-33c0-4791-babe-898460178572",
+      "name": "Merge",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17c64559-5a85-4cac-b16d-501c8a37cfe6",
+              "name": "id_user",
+              "value": "={{ $('Get id_user').item.json.id_user }}",
+              "type": "string"
+            },
+            {
+              "id": "27058e70-0e95-41d3-b105-42df994c9a3c",
+              "name": "message",
+              "value": "={{ $('WH').item.json.message }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        -400
+      ],
+      "id": "4a6d7d65-64df-4b51-8262-6352f360bf1f",
+      "name": "User Var1"
+    }
+  ],
+  "pinData": {
+    "WH": [
+      {
+        "json": {
+          "message": "Hola, que puedes realizar?",
+          "sender": "573104751978"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agente Multiplicador de ejecuciones",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Defind couple or single",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WH": {
+      "main": [
+        [
+          {
+            "node": "Get id_user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        []
+      ]
+    },
+    "Get id_user": {
+      "main": [
+        [
+          {
+            "node": "Get Pareja By Id User",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Pareja By Id Couple",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pareja By Id User": {
+      "main": [
+        [
+          {
+            "node": "Merge Pareja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pareja By Id Couple": {
+      "main": [
+        [
+          {
+            "node": "Merge Pareja",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Pareja": {
+      "main": [
+        [
+          {
+            "node": "Code Defind Couple",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Defind Couple": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Defind couple or single",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent Defind couple or single",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Defind couple or single": {
+      "main": [
+        [
+          {
+            "node": "If Pareja",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Pareja": {
+      "main": [
+        [
+          {
+            "node": "AI Agente Multiplicador de ejecuciones",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "User Var1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agente Multiplicador de ejecuciones": {
+      "main": [
+        [
+          {
+            "node": "Two Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agente Multiplicador de ejecuciones",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agente Multiplicador de ejecuciones",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Two Users": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent Defind couple or single",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "AI Agente Multiplicador de ejecuciones",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Execute P0",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Var1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Bogota",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "0abe4205-0122-455f-b6f3-78bdc5871fad",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c76afa9cff43306f36713e17f1fd1c999c9eb9417f2067b142cf9cd48e1a6d96"
+  },
+  "id": "4hvw6lJr0fn61qk7",
+  "tags": []
+}
