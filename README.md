@@ -11,7 +11,7 @@ Con Par-0 puedes recibir consejos personalizados, automatizar procesos y mantene
 
 - [**n8n**](https://n8n.io/) → Automatización de procesos y workflows.  
 - [**Vercel**](https://vercel.com/) → Hosting de la landing page.  
-- [**Supabase**](https://supabase.com/) → Base de datos en la nube. Acá puedes ver el diagrama(https://drive.google.com/file/d/1lBzqe6ge7W6ENyg-dEbzRJFlBANUzEnn/view?usp=sharing)
+- [**Supabase**](https://supabase.com/) → Base de datos en la nube. [**Acá puedes ver el diagrama**](https://drive.google.com/file/d/1lBzqe6ge7W6ENyg-dEbzRJFlBANUzEnn/view?usp=sharing)
 - [**WhatsApp Business API**](https://developers.facebook.com/docs/whatsapp) → Envío de mensajes y comunicación con usuarios.  
 - [**Perplexity**](https://www.perplexity.ai/) → Soporte de consultas web con IA.  
 - [**OpenAI**](https://openai.com/) → Modelo de lenguaje para generar respuestas inteligentes y adaptadas al contexto.  
