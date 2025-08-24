@@ -3,7 +3,7 @@
 **Par-0** es un agente de inteligencia artificial diseñado para ayudarte a manejar mejor tus **finanzas personales y de pareja**.  
 Con Par-0 puedes recibir consejos personalizados, automatizar procesos y mantener un control más organizado de tu dinero, ya sea que administres tus finanzas de manera individual o compartida con tu pareja.  
 
-👉 [Empieza ahora en la versión web](s)
+👉 [Empieza ahora en la versión web](https://parcero.vercel.app/)
 
 ---
 
@@ -20,10 +20,10 @@ Con Par-0 puedes recibir consejos personalizados, automatizar procesos y mantene
 
 ## 👩‍💻 Creadores – Equipo ImagineApps
 
-- **Natalia Castro:** líder y diseñadora obsesionada por contar historias y crear experiencias de alto impacto.
-- **Paola Olarte:** la tesa del software, arquitectura y soluciones integrales.
-- **Diego Rubiano:** el master de bases de datos, diagramas y backend.
-- **Luis Arrieta:** el crack de las automatizaciones e inteligencia artificial.
+- [**Natalia Castro:**](https://www.linkedin.com/in/natalia-castro-monta%C3%B1a-486b37131/) líder y diseñadora obsesionada por contar historias y crear experiencias de alto impacto.
+- [**Paola Olarte:**](https://www.linkedin.com/in/paola-cuadros-01069492/) la tesa del software, arquitectura y soluciones integrales.
+- [**Diego Rubiano:**](www.linkedin.com/in/diego-alejandro-rubiano-gonzalez) el master de bases de datos, diagramas y backend.
+- [**Luis Arrieta:**](https://www.linkedin.com/in/luis-arrieta-mercado-561549272/) el crack de las automatizaciones e inteligencia artificial.
 
 ---
 
